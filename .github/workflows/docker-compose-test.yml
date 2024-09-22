@@ -1,0 +1,49 @@
+name: Docker Compose 빌드 테스트
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 리포지토리 체크아웃
+      uses: actions/checkout@v4
+
+    - name: Docker Compose 설치
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Docker Compose 버전 확인
+      run: docker-compose --version
+
+    - name: Docker Compose로 서비스 빌드
+      run: docker-compose build
+
+    - name: Docker Compose로 서비스 시작
+      run: docker-compose up -d
+
+    - name: 서비스 상태 확인
+      run: docker-compose ps
+
+    - name: 백엔드 서비스 헬스 체크
+      run: |
+        sleep 10  # 서비스가 완전히 시작될 때까지 대기
+        curl http://localhost:5000 || exit 1
+
+    - name: 프론트엔드 서비스 헬스 체크
+      run: |
+        sleep 10  # 서비스가 완전히 시작될 때까지 대기
+        curl http://localhost:80 || exit 1
+
+    - name: Docker Compose 로그 출력 (오류 발생 시)
+      if: failure()
+      run: docker-compose logs
+
+    - name: Docker Compose 서비스 중지
+      run: docker-compose down
