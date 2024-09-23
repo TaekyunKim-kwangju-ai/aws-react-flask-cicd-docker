@@ -6,7 +6,7 @@ function App() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/message')
+    axios.get('https://6bpqh9f645.execute-api.ap-northeast-2.amazonaws.com/dev/api/message')
       .then(response => {
         setMessage(response.data.message);
       })
