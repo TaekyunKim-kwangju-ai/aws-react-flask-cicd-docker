@@ -1,4 +1,4 @@
-# Python 3.9 이미지를 기반으로 사용
+# Python 3.12 이미지를 기반으로 사용
 FROM python:3-slim
 
 # 작업 디렉토리 설정
