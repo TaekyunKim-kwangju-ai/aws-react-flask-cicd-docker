@@ -30,6 +30,7 @@ jobs:
     - name: Zappa 배포
       run: |
         cd backend
+        source .venv/bin/activate
         zappa update dev || zappa deploy dev
 
   deploy-frontend:
